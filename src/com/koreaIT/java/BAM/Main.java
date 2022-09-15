@@ -1,11 +1,13 @@
 package com.koreaIT.java.BAM;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-	public static void main(String[] args) {
+	public static void main(String[] args, Object title, Object body) {
 
 		System.out.println("== 프로그램 시작 ==");
 
@@ -66,8 +68,12 @@ public class Main {
 					Article article=articles.get(i);
 					
 					if(article.id ==id) {
+						Date date = new Date();
+						
+
 						found = true;
-						System.out.printf("%d번 게시물은 존재합니다\n",id);
+						System.out.println("번호	|	날짜	|	제목	|	내용");
+						System.out.printf("%d	|	%s	|	%s	|	%s\n",id,date,title,body );
 					}
 				}
 				if(found == false) {
