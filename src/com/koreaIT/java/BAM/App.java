@@ -8,6 +8,9 @@ import com.koreaIT.java.BAM.dto.Article;
 import com.koreaIT.java.BAM.dto.Member;
 import com.koreaIT.java.BAM.util.Util;
 
+import controller.ArticleController;
+import controller.MemberController;
+
 public class App {
 	private List<Article> articles;
 	private List<Member> members;
@@ -24,6 +27,9 @@ public class App {
 		makeTestData();
 
 		Scanner sc = new Scanner(System.in);
+		
+		MemberController memberController = new MemberController(members,sc);
+		ArticleController articleController = new ArticleController();
 
 		while (true) {
 
@@ -40,43 +46,7 @@ public class App {
 			}
 
 			if (cmd.equals("member join")) {
-				int id = members.size() + 1;
-				String loginId=null;
-				String regDate = Util.getNowDateStr();
-				while (true) {
-					System.out.printf("로그인 아이디 :");
-					 loginId = sc.nextLine();
-					if (loginIdchk(loginId) == false) {
-						System.out.printf("%S은(는)이미 사용중인 아이디입니다\n", loginId);
-						continue;
-					}
-					System.out.printf("%s은(는)사용 가능한 아이디입니다\n",loginId);
-					break;
-				}
-				String loginPw = null;
-				String loginPwChk = null;
-				
-				while (true) {
-					System.out.printf("로그인 비밀번호 :");
-					loginPw = sc.nextLine();
-					System.out.printf("비밀번호 확인 :");
-					loginPwChk = sc.nextLine();
-
-					if (loginPw.equals(loginPwChk) == false) {
-						System.out.println("비밀번호를 다시 입력해주세요");
-						continue;
-					}
-					break;
-				}
-
-				System.out.printf("이름 :");
-				String Name = sc.nextLine();
-
-				Member member = new Member(id, regDate, loginId, loginPw, Name);
-
-				members.add(member);
-
-				System.out.printf("%s 회원님 환영합니다\n", loginId);
+				memberController.doJoin();
 
 			} else if (cmd.equals("article write")) {
 				int id = articles.size() + 1;
@@ -191,29 +161,6 @@ public class App {
 		sc.close();
 	}
 
-	private boolean loginIdchk(String loginId) {
-		int index =getMemberIndexByLoginId(loginId);
-		
-		if(index ==-1) {
-			return true;
-		}
-		
-		return false;
-		
-	}
-
-	private int getMemberIndexByLoginId(String loginId) {
-		int i = 0;
-		for (Member member : members) {
-			if (member.loginId.equals(loginId)) {
-				return i;
-			}
-			i++;
-		}
-		return -1;
-
-	}
-	
 	
 
 	private int getArticleIndexById(int id) {
@@ -225,7 +172,6 @@ public class App {
 			i++;
 		}
 		return -1;
-
 	}
 
 	private Article getArticleById(int id) {
