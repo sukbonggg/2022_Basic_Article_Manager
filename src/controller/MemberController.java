@@ -9,6 +9,7 @@ public class MemberController extends Controller{
 	List<Member> members;
 	Scanner sc;
 	String cmd;
+	String methodName;
 	public MemberController(List<Member> members, Scanner sc) {
 		this.members = members;
 		this.sc = sc;
@@ -16,9 +17,18 @@ public class MemberController extends Controller{
 	}
 	
 	@Override
-	public void doAction(String cmd) {
-		// 
+	public void doAction(String cmd,String methodName) {
 		this.cmd =cmd;
+		this.methodName=methodName;
+			switch (methodName) {
+			case "join":
+				doJoin();
+				break;
+
+			default:
+				System.out.println("존재하는 명령문이 아닙니다.");
+				break;
+			}
 	}
 
 	public void doJoin() {

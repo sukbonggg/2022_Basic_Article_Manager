@@ -11,18 +11,39 @@ public class ArticleController extends Controller {
 	List<Article> articles;
 	Scanner sc;
 	String cmd;
-
+	String methodName;
 	public ArticleController(List<Article> articles, Scanner sc) {
 		this.articles = articles;
 		this.sc = sc;
 	
 	}
 	@Override
-	public void doAction(String cmd) {
+	public void doAction(String cmd,String methodName) {
 		this.cmd =cmd;
+		this.methodName=methodName;
 		
-	}
+		switch (methodName) {
+		case "write":
+			doWrite();
+			break;
+		case "list":
+			showList();
+			break;
+		case "detail":
+			showDetial();
+			break;
+		case "modify":
+			showModify();
+			break;
+		case "delete":
+			doDelete();
+			break;
 
+		default:
+			System.out.println("존재하는 명령문이 아닙니다.");
+			break;			
+		}
+	}
 
 	public void doWrite() {
 		int id = articles.size() + 1;
@@ -66,6 +87,12 @@ public class ArticleController extends Controller {
 	}
 	public void showDetial() {
 		String[] cmdBits = cmd.split(" ");
+		
+		if(cmdBits.length ==2) {
+			System.out.println("명령어를 확인해주세요");
+			return;
+		}
+		
 		int id = Integer.parseInt(cmdBits[2]);
 		Article foundArticle = getArticleById(id);
 		if (foundArticle == null) {
@@ -83,6 +110,10 @@ public class ArticleController extends Controller {
 	public void showModify() {
 		String[] cmdBits = cmd.split(" ");
 		int id = Integer.parseInt(cmdBits[2]);
+		if(cmdBits.length ==2) {
+			System.out.println("명령어를 확인해주세요");
+			return;
+		}
 		Article foundArticle = getArticleById(id);
 		if (foundArticle == null) {
 			System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
@@ -100,8 +131,13 @@ public class ArticleController extends Controller {
 
 	public void doDelete() {
 		String[] cmdBits = cmd.split(" ");
+		
 		int id = Integer.parseInt(cmdBits[2]);
 		int foundIndex = getArticleIndexById(id);
+		if(cmdBits.length ==2) {
+			System.out.println("명령어를 확인해주세요");
+			return;
+		}
 		if (foundIndex == -1) {
 			System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
 			return;
