@@ -1,37 +1,39 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
 import com.koreaIT.java.BAM.dto.Member;
 import com.koreaIT.java.BAM.util.Util;
 
-public class MemberController extends Controller{
-	List<Member> members;
-	Scanner sc;
-	String cmd;
-	String methodName;
-	public MemberController(List<Member> members, Scanner sc) {
-		this.members = members;
+public class MemberController extends Controller {
+	private List<Member> members;
+	private Scanner sc;
+	private String cmd;
+
+	public MemberController(Scanner sc) {
+		this.members = new ArrayList<>();
 		this.sc = sc;
-		
+
 	}
-	
+
 	@Override
-	public void doAction(String cmd,String methodName) {
-		this.cmd =cmd;
-		this.methodName=methodName;
-			switch (methodName) {
-			case "join":
-				doJoin();
-				break;
+	public void doAction(String cmd, String methodName) {
+		this.cmd = cmd;
 
-			default:
-				System.out.println("존재하는 명령문이 아닙니다.");
-				break;
-			}
+		switch (methodName) {
+		case "join":
+			doJoin();
+			break;
+
+		default:
+			System.out.println("존재하지 않는 명령문입니다.");
+			break;
+		}
 	}
 
-	public void doJoin() {
+	private void doJoin() {
 		int id = members.size() + 1;
 		String loginId = null;
 		String regDate = Util.getNowDateStr();
@@ -93,7 +95,5 @@ public class MemberController extends Controller{
 		return -1;
 
 	}
-
-	
 
 }
