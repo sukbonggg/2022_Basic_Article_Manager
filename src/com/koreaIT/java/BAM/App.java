@@ -9,6 +9,7 @@ import com.koreaIT.java.BAM.dto.Member;
 import com.koreaIT.java.BAM.util.Util;
 
 import controller.ArticleController;
+import controller.Controller;
 import controller.MemberController;
 
 public class App {
@@ -45,27 +46,48 @@ public class App {
 				break;
 			}
 
-			if (cmd.equals("member join")) {
-				memberController.doJoin();
+			String[] cmdBits = cmd.split(" ");
 
-			} else if (cmd.equals("article write")) {
-				articleController.doWrite();							 
-			} else if (cmd.startsWith("article list")) {
-				articleController.showList(cmd);
-			} else if (cmd.startsWith("article detail ")) {
-				articleController.showDetial(cmd);
-			} else if (cmd.startsWith("article delete ")) {
-				articleController.doDelete(cmd);
-			} else if (cmd.startsWith("article modify ")) {
-				articleController.showModify(cmd);
+			if (cmdBits.length == 1) {
+				System.out.println("명령어를 확인해주세요");
+				continue;
+			}
+			String controllerName = cmdBits[0];// article
+			String methodName = cmdBits[1];// list
+
+			Controller controller = null;
+
+			if (controllerName.equals("article")) {
+				controller = articleController;
+			} else if (controllerName.equals("member")) {
+				controller = memberController;
 			} else {
 				System.out.println("존재하지 않는 명령어 입니다");
+				continue;
 			}
-			System.out.println("== 프로그램 끝 ==");
+			controller.doAction(cmd);
 
-			sc.close();
+//			if (cmd.equals("member join")) {
+//				memberController.doJoin();
+//			} else if (cmd.equals("article write")) {
+//				articleController.doWrite();							 
+//			} else if (cmd.startsWith("article list")) {
+//				articleController.showList(cmd);
+//			} else if (cmd.startsWith("article detail ")) {
+//				articleController.showDetial(cmd);
+//			} else if (cmd.startsWith("article delete ")) {
+//				articleController.doDelete(cmd);
+//			} else if (cmd.startsWith("article modify ")) {
+//				articleController.showModify(cmd);
+//			} else {
+//				System.out.println("존재하지 않는 명령어 입니다");
 		}
+		System.out.println("== 프로그램 끝 ==");
+
+		sc.close();
 	}
+
+	
 
 	private void makeTestData() {
 		System.out.println("테스트를 위한 데이터를 생성합니다");
