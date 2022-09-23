@@ -11,6 +11,7 @@ public class MemberController extends Controller {
 	private List<Member> members;
 	private Scanner sc;
 	private String cmd;
+	private Member loginedMember;
 
 	public MemberController(Scanner sc) {
 		this.members = new ArrayList<>();
@@ -25,6 +26,9 @@ public class MemberController extends Controller {
 		switch (methodName) {
 		case "join":
 			doJoin();
+			break;
+		case "login":
+			dologin();
 			break;
 
 		default:
@@ -71,6 +75,38 @@ public class MemberController extends Controller {
 		members.add(member);
 
 		System.out.printf("%s 회원님 환영합니다\n", loginId);
+	}
+
+	private void dologin() {
+
+		System.out.printf("로그인 입력 :");
+		String loginId = sc.nextLine();
+		System.out.printf("비밀번호 입력 :");
+		String loginPw = sc.nextLine();
+		// 사용자의 입력 아아디와 일치하는 회원이 있는지 확인
+		Member member = getMemberByLoginId(loginId);
+
+		if (member == null) {
+			System.out.println("일치하는 회원이 없습니다");
+			return;
+		}
+		if (member.loginPw.equals(loginPw) == false) {
+			System.out.println("비밀번호를 확인해주세요");
+			return;
+		}
+		
+		loginedMember =member;
+		System.out.println("로그인 성공!");
+	}
+
+	private Member getMemberByLoginId(String loginId) {
+		int index = getMemberIndexByLoginId(loginId);
+
+		if (index != -1) {
+			return members.get(index);
+		}
+
+		return null;
 	}
 
 	private boolean loginIdchk(String loginId) {
