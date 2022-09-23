@@ -16,4 +16,7 @@ public class Member extends Dto{
 		this.name = name;
 	}
 
+
+
+
 }

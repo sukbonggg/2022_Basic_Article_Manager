@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.koreaIT.java.BAM.dto.Article;
 import com.koreaIT.java.BAM.dto.Member;
 import com.koreaIT.java.BAM.util.Util;
 
@@ -28,12 +29,43 @@ public class MemberController extends Controller {
 			doJoin();
 			break;
 		case "login":
-			dologin();
+			doLogin();
 			break;
+		case "logout":
+			doLogout();
+			break;
+		case "profile":
+			showProfile();
+			break;
+		
 
 		default:
 			System.out.println("존재하지 않는 명령문입니다.");
 			break;
+		}
+	}
+	private boolean isLoigned() {
+		return loginedMember !=null;				
+	}
+	private void doLogout() {
+		if(isLoigned()==false) {
+			System.out.println("로그인 상태가 아닙니다");
+			return;
+		}
+		
+		loginedMember = null;
+		System.out.println("로그아웃 되었습니다");
+
+	
+	}
+ 
+	private void showProfile() {
+		if (loginedMember != null) {
+			System.out.println("== 내정보 ==");
+			System.out.printf("로그인 아이디:%s\n", loginedMember.loginId);
+			System.out.printf("이름 :%s\n", loginedMember.name);
+		} else {
+			System.out.println("로그아웃 상태입니다");
 		}
 	}
 
@@ -77,8 +109,11 @@ public class MemberController extends Controller {
 		System.out.printf("%s 회원님 환영합니다\n", loginId);
 	}
 
-	private void dologin() {
-
+	private void doLogin() {
+		if(isLoigned()) {
+			System.out.println("이미 로그인 상태입니다.");
+			return;				
+		}
 		System.out.printf("로그인 입력 :");
 		String loginId = sc.nextLine();
 		System.out.printf("비밀번호 입력 :");
@@ -94,9 +129,18 @@ public class MemberController extends Controller {
 			System.out.println("비밀번호를 확인해주세요");
 			return;
 		}
-		
-		loginedMember =member;
-		System.out.println("로그인 성공!");
+
+		loginedMember = member;
+
+		System.out.printf("로그인 성공! %s님 환영합니다\n", loginedMember.name);
+	}
+
+	public void makeTestData() {
+		System.out.println("테스트를 위한 회원 데이터를 생성합니다");
+		members.add(new Member(1, Util.getNowDateStr(), "test1", "test1", "김철수"));
+		members.add(new Member(1, Util.getNowDateStr(), "test2", "test2", "김영희"));
+		members.add(new Member(1, Util.getNowDateStr(), "test3", "test3", "박영수"));
+
 	}
 
 	private Member getMemberByLoginId(String loginId) {
