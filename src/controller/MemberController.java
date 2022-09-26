@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import com.koreaIT.java.BAM.dto.Article;
 import com.koreaIT.java.BAM.dto.Member;
 import com.koreaIT.java.BAM.util.Util;
 
 public class MemberController extends Controller {
 	private List<Member> members;
 	private Scanner sc;
-	private String cmd;
-	private Member loginedMember;
+	
+	
 
 	public MemberController(Scanner sc) {
 		this.members = new ArrayList<>();
@@ -22,7 +21,7 @@ public class MemberController extends Controller {
 
 	@Override
 	public void doAction(String cmd, String methodName) {
-		this.cmd = cmd;
+		
 
 		switch (methodName) {
 		case "join":
@@ -37,28 +36,24 @@ public class MemberController extends Controller {
 		case "profile":
 			showProfile();
 			break;
-		
 
 		default:
 			System.out.println("존재하지 않는 명령문입니다.");
 			break;
 		}
 	}
-	private boolean isLoigned() {
-		return loginedMember !=null;				
-	}
+
 	private void doLogout() {
-		if(isLoigned()==false) {
+		if (isLoigned() == false) {
 			System.out.println("로그인 상태가 아닙니다");
 			return;
 		}
-		
+
 		loginedMember = null;
 		System.out.println("로그아웃 되었습니다");
 
-	
 	}
- 
+
 	private void showProfile() {
 		if (loginedMember != null) {
 			System.out.println("== 내정보 ==");
@@ -110,9 +105,9 @@ public class MemberController extends Controller {
 	}
 
 	private void doLogin() {
-		if(isLoigned()) {
+		if (isLoigned()) {
 			System.out.println("이미 로그인 상태입니다.");
-			return;				
+			return;
 		}
 		System.out.printf("로그인 입력 :");
 		String loginId = sc.nextLine();
@@ -134,6 +129,7 @@ public class MemberController extends Controller {
 
 		System.out.printf("로그인 성공! %s님 환영합니다\n", loginedMember.name);
 	}
+
 
 	public void makeTestData() {
 		System.out.println("테스트를 위한 회원 데이터를 생성합니다");

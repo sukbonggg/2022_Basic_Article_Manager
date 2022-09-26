@@ -24,6 +24,10 @@ public class ArticleController extends Controller {
 		this.cmd = cmd;
 		switch (methodName) {
 		case "write":
+			if(isLoigned()==false) {
+				System.out.println("로그인 후 이용해주세요");
+				break;
+			}
 			doWrite();
 			break;
 		case "list":
@@ -46,6 +50,7 @@ public class ArticleController extends Controller {
 	}
 
 	private void doWrite() {
+	
 		int id = articles.size() + 1;
 		String regDate = Util.getNowDateStr();
 		System.out.printf("제목 : ");
