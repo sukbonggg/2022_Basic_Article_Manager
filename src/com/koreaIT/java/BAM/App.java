@@ -9,14 +9,14 @@ import controller.MemberController;
 public class App {
 	public void run() {
 
-		System.out.println("== 프로그램 시작 ==");		
+		System.out.println("== 프로그램 시작 ==");
 
 		Scanner sc = new Scanner(System.in);
 
 		MemberController memberController = new MemberController(sc);
-		
+
 		ArticleController articleController = new ArticleController(sc);
-		
+
 		articleController.makeTestData();
 		memberController.makeTestData();
 		while (true) {
@@ -48,11 +48,34 @@ public class App {
 				controller = articleController;
 			} else if (controllerName.equals("member")) {
 				controller = memberController;
+
 			} else {
 				System.out.println("존재하지 않는 명령어 입니다");
 				continue;
 			}
-			controller.doAction(cmd,methodName);
+//			String actionName = controllerName + "/" + methodName;
+			switch (methodName) {
+			case "write":
+			case "modify":
+			case "delete":
+			case "logout":
+			case "profile":
+				if (Controller.isLoigned() == false) {
+					System.out.println("로그인 후 이용해주세요");
+					continue;
+				}
+				break;
+			case "login":
+			case "join":
+				if (Controller.isLoigned()) {
+					System.out.println("로그아웃 후 이용해주세요");
+					continue;
+				}
+				break;
+			}
+
+			controller.doAction(cmd, methodName);
+		}
 
 //			if (cmd.equals("member join")) {
 //				memberController.doJoin();
@@ -68,15 +91,10 @@ public class App {
 //				articleController.showModify(cmd);
 //			} else {
 //				System.out.println("존재하지 않는 명령어 입니다");
-		}
+
 		System.out.println("== 프로그램 끝 ==");
 
 		sc.close();
 	}
-
-
-	
-
-	
 
 }

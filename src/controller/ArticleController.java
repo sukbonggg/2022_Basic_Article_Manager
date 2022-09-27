@@ -24,11 +24,6 @@ public class ArticleController extends Controller {
 		this.cmd = cmd;
 		switch (methodName) {
 		case "write":
-			if (isLoigned() == false) {
-				System.out.println("로그인 후 이용해주세요");
-				break;
-			}
-
 			doWrite();
 			break;
 		case "list":
@@ -37,18 +32,10 @@ public class ArticleController extends Controller {
 		case "detail":
 			showDetial();
 			break;
-		case "modify":
-			if (isLoigned() == false) {
-				System.out.println("로그인 후 이용해주세요");
-				break;
-			}
+		case "modify":		
 			showModify();
 			break;
-		case "delete":
-			if (isLoigned() == false) {
-				System.out.println("로그인 후 이용해주세요");
-				break;
-			}
+		case "delete":			
 			doDelete();
 			break;
 
@@ -157,8 +144,8 @@ public class ArticleController extends Controller {
 
 		int id = Integer.parseInt(cmdBits[2]);
 
-		Article foundArticle =getArticleById(id);
-		
+		Article foundArticle = getArticleById(id);
+
 		if (cmdBits.length == 2) {
 			System.out.println("명령어를 확인해주세요");
 			return;
@@ -173,6 +160,7 @@ public class ArticleController extends Controller {
 		}
 
 		articles.remove(foundArticle);
+
 		System.out.printf("%d번 게시물이 삭제되었습니다\n", id);
 
 	}
