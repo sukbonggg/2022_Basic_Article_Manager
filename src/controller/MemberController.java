@@ -37,7 +37,7 @@ public class MemberController extends Controller {
 			break;
 		}
 	}
-	
+
 	private void doLogout() {
 		loginedMember = null;
 		System.out.println("로그아웃 되었습니다");
@@ -47,39 +47,57 @@ public class MemberController extends Controller {
 		System.out.println("== 내 정보 ==");
 		System.out.printf("로그인 아이디 : %s\n", loginedMember.loginId);
 		System.out.printf("이름 : %s\n", loginedMember.name);
-		
+
 	}
 
 	private void doLogin() {
-		System.out.printf("로그인 아이디 : ");
-		String loginId = sc.nextLine();
-		System.out.printf("로그인 비밀번호 : ");
-		String loginPw = sc.nextLine();
-		
-		Member member = getMemberByLoginId(loginId);
-		
-		if(member == null) {
-			System.out.println("일치하는 회원이 없습니다");
-			return;
+		Member member = null;
+		String loginPw = null;
+		while (true) {
+			System.out.printf("로그인 아이디 : ");
+			String loginId = sc.nextLine();
+			if (loginId.trim().length() == 0) {
+				System.out.println("로그인 아이디를 입력하세요");
+				continue;
+			}
+			while (true) {
+				System.out.printf("로그인 비밀번호 : ");
+				loginPw = sc.nextLine().trim();
+
+				if (loginPw.trim().length() == 0) {
+					System.out.println("비밀번호를 입력하세요");
+					continue;
+				}
+				break;
+			}
+
+			member = getMemberByLoginId(loginId);
+
+			if (member == null) {
+				System.out.println("일치하는 회원이 없습니다");
+				return;
+			}
+
+			if (member.loginPw.equals(loginPw) == false) {
+				System.out.println("비밀번호가 일치하지 않습니다");
+				return;
+			}
+			break;
 		}
-		
-		if(member.loginPw.equals(loginPw) == false) {
-			System.out.println("비밀번호를 확인해주세요");
-			return;
-		}
-		
+
 		loginedMember = member;
 		System.out.printf("로그인 성공! %s님 환영합니다!\n", loginedMember.name);
 	}
 
 	private void doJoin() {
-		int id =Container.memberDao.getNewId(); 
+		int id = Container.memberDao.getNewId();
 		String regDate = Util.getNowDateStr();
 
 		String loginId = null;
 		while (true) {
 			System.out.printf("로그인 아이디 : ");
 			loginId = sc.nextLine();
+			
 
 			if (loginIdChk(loginId) == false) {
 				System.out.printf("%s은(는) 이미 사용중인 아이디입니다\n", loginId);
@@ -113,7 +131,7 @@ public class MemberController extends Controller {
 
 		System.out.printf("%s회원님 환영합니다\n", loginId);
 	}
-	
+
 	private boolean loginIdChk(String loginId) {
 		int index = getMemberIndexByLoginId(loginId);
 
@@ -135,14 +153,14 @@ public class MemberController extends Controller {
 		}
 		return -1;
 	}
-	
+
 	private Member getMemberByLoginId(String loginId) {
 		int index = getMemberIndexByLoginId(loginId);
-		
-		if(index != -1) {
+
+		if (index != -1) {
 			return members.get(index);
 		}
-		
+
 		return null;
 	}
 
@@ -152,5 +170,5 @@ public class MemberController extends Controller {
 		members.add(new Member(Container.memberDao.getNewId(), Util.getNowDateStr(), "test2", "test2", "김영희"));
 		members.add(new Member(Container.memberDao.getNewId(), Util.getNowDateStr(), "test3", "test3", "박영수"));
 	}
-	
+
 }
