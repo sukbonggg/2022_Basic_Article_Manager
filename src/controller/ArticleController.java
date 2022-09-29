@@ -9,7 +9,6 @@ import com.koreaIT.java.BAM.dto.Member;
 import com.koreaIT.java.BAM.util.Util;
 
 public class ArticleController extends Controller {
-	private List<Article> articles;
 	private Scanner sc;
 	private String cmd;
 
@@ -63,8 +62,6 @@ public class ArticleController extends Controller {
 
 		String searchKeyword = cmd.substring("article list".length()).trim();
 
-		
-
 		List<Article> forPrintArticles = Container.articleService.getForPrintArticles(searchKeyword);
 
 		if (forPrintArticles.size() == 0) {
@@ -75,17 +72,7 @@ public class ArticleController extends Controller {
 		for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
 			Article article = forPrintArticles.get(i);
 
-			String writerName = null;
-
-			List<Member> members = Container.memberDao.members;
-
-			for (Member member : members) {
-				if (article.memberId == member.id) {
-					writerName = member.name;
-					break;
-				}
-			}
-
+			String writerName = Container.memberSerivce.getWriterName(article.memberId);
 			System.out.printf("%d	|	%s	|	%s	|	%s	|	%d\n", article.id, article.title, article.regDate,
 					writerName, article.viewCnt);
 		}
@@ -108,16 +95,7 @@ public class ArticleController extends Controller {
 			return;
 		}
 
-		String writerName = null;
-
-		List<Member> members = Container.memberDao.members;
-
-		for (Member member : members) {
-			if (foundArticle.memberId == member.id) {
-				writerName = member.name;
-				break;
-			}
-		}
+		String writerName = Container.memberSerivce.getWriterName(foundArticle.memberId);
 
 		foundArticle.addViewCnt();
 
@@ -185,12 +163,10 @@ public class ArticleController extends Controller {
 			return;
 		}
 
-		articles.remove(foundArticle);
+		Container.articleService.remove(foundArticle);
 
 		System.out.printf("%d번 게시물이 삭제되었습니다\n", id);
 	}
-
-	
 
 	public void makeTestData() {
 		System.out.println("테스트를 위한 게시물 데이터를 생성합니다");

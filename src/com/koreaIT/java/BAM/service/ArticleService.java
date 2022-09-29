@@ -27,4 +27,11 @@ public class ArticleService {
 		return 	Container.articleDao.getArticleById(id);
 		
 	}
+
+	public void remove(Article foundArticle) {
+		Container.articleDao.remove(foundArticle);
+		
+	}
+
+	
 }

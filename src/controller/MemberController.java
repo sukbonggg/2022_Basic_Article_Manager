@@ -1,6 +1,5 @@
 package controller;
 
-import java.util.List;
 import java.util.Scanner;
 
 import com.koreaIT.java.BAM.container.Container;
@@ -8,11 +7,11 @@ import com.koreaIT.java.BAM.dto.Member;
 import com.koreaIT.java.BAM.util.Util;
 
 public class MemberController extends Controller {
-	private List<Member> members;
+
 	private Scanner sc;
 
 	public MemberController(Scanner sc) {
-		this.members = Container.memberDao.members;
+	
 		this.sc = sc;
 	}
 
@@ -71,7 +70,7 @@ public class MemberController extends Controller {
 				break;
 			}
 
-			member = getMemberByLoginId(loginId);
+			member = Container.memberSerivce.getMemberByLoginId(loginId);
 
 			if (member == null) {
 				System.out.println("일치하는 회원이 없습니다");
@@ -90,7 +89,7 @@ public class MemberController extends Controller {
 	}
 
 	private void doJoin() {
-		int id = Container.memberDao.setArticleId();
+		int id = Container.memberSerivce.setArticleId();
 		String regDate = Util.getNowDateStr();
 
 		String loginId = null;
@@ -99,7 +98,7 @@ public class MemberController extends Controller {
 			loginId = sc.nextLine();
 			
 
-			if (loginIdChk(loginId) == false) {
+			if (Container.memberSerivce.loginIdChk(loginId) == false) {
 				System.out.printf("%s은(는) 이미 사용중인 아이디입니다\n", loginId);
 				continue;
 			}
@@ -127,48 +126,20 @@ public class MemberController extends Controller {
 
 		Member member = new Member(id, regDate, loginId, loginPw, name);
 
-		Container.memberDao.add(member);
+		Container.memberSerivce.add(member);
 
 		System.out.printf("%s회원님 환영합니다\n", loginId);
 	}
 
-	private boolean loginIdChk(String loginId) {
-		int index = getMemberIndexByLoginId(loginId);
+	
 
-		if (index == -1) {
-			return true;
-		}
 
-		return false;
-	}
-
-	private int getMemberIndexByLoginId(String loginId) {
-		int i = 0;
-
-		for (Member member : members) {
-			if (member.loginId.equals(loginId)) {
-				return i;
-			}
-			i++;
-		}
-		return -1;
-	}
-
-	private Member getMemberByLoginId(String loginId) {
-		int index = getMemberIndexByLoginId(loginId);
-
-		if (index != -1) {
-			return members.get(index);
-		}
-
-		return null;
-	}
 
 	public void makeTestData() {
 		System.out.println("테스트를 위한 회원 데이터를 생성합니다");
-		members.add(new Member(Container.memberDao.setArticleId(), Util.getNowDateStr(), "test1", "test1", "김철수"));
-		members.add(new Member(Container.memberDao.setArticleId(), Util.getNowDateStr(), "test2", "test2", "김영 희"));
-		members.add(new Member(Container.memberDao.setArticleId(), Util.getNowDateStr(), "test3", "test3", "박영수"));
+		Container.memberSerivce.add(new Member(Container.memberSerivce.setArticleId(), Util.getNowDateStr(), "test1", "test1", "김철수"));
+		Container.memberSerivce.add(new Member(Container.memberSerivce.setArticleId(), Util.getNowDateStr(), "test2", "test2", "김영 희"));
+		Container.memberSerivce.add(new Member(Container.memberSerivce.setArticleId(), Util.getNowDateStr(), "test3", "test3", "박영수"));
 	}
 
 }
